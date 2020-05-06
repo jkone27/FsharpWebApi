@@ -6,15 +6,28 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.AspNetCore.Http
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
+open Microsoft.Extensions.Configuration
+open Microsoft.Extensions.Options
 open Services
 open Microsoft.OpenApi.Models
+open AppConfiguration
+open Migrations
 
-type Startup() =
+type Startup(configuration: IConfiguration) =
 
-    member this.ConfigureServices(services: IServiceCollection) =
+    member _.ConfigureServices(services: IServiceCollection) =
         services.AddControllers() |> ignore
-        services.AddScoped<INumbersService, NumbersService>() |> ignore
-        services.AddScoped<PersonsRepository>() |> ignore
+        services.AddSingleton<INumbersService, NumbersService>() |> ignore
+        services.AddSingleton<PersonsRepository>() |> ignore
+        services.AddTransient<IStartupFilter, DbMigrationStartup>() |> ignore
+
+        //configuration
+        let configurationFunction = 
+            new System.Action<_>(
+                fun (opt :DbConfiguration) ->  
+                    configuration.GetSection("DbConfiguration").Bind(opt)) 
+        
+        services.Configure<DbConfiguration>(configurationFunction) |> ignore
 
         //needed for swagger
         services.AddMvc() |> ignore
@@ -22,7 +35,7 @@ type Startup() =
             c.SwaggerDoc("v1", new OpenApiInfo( Title = "My API", Version = "v1" ))
         )  |> ignore
 
-    member this.Configure(app: IApplicationBuilder, env: IWebHostEnvironment) =
+    member _.Configure(app: IApplicationBuilder, env: IWebHostEnvironment) =
         if env.IsDevelopment() then
             app.UseDeveloperExceptionPage() |> ignore
 

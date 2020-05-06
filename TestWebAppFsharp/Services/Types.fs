@@ -8,7 +8,8 @@ let connectionString = "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=test;
 
 type sql = SqlDataProvider<Common.DatabaseProviderTypes.MSSQLSERVER, connectionString>
 
-let ctx = sql.GetDataContext()
+let ctxFactory connectionStringRuntime = 
+    sql.GetDataContext(connectionStringRuntime: string)
 
 [<CLIMutable>]
 type PersonDto = { Name: string; Age : int; Id: int }
