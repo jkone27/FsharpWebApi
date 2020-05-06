@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "TestWebAppFsharp", "TestWebAppFsharp\TestWebAppFsharp.fsproj", "{3F2BAD3C-4B72-4889-B598-18C356142852}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication2", "WebApplication2\WebApplication2.csproj", "{658C68FB-53DF-495C-A2E0-74E890663911}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3F2BAD3C-4B72-4889-B598-18C356142852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F2BAD3C-4B72-4889-B598-18C356142852}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F2BAD3C-4B72-4889-B598-18C356142852}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F2BAD3C-4B72-4889-B598-18C356142852}.Release|Any CPU.Build.0 = Release|Any CPU
+		{658C68FB-53DF-495C-A2E0-74E890663911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{658C68FB-53DF-495C-A2E0-74E890663911}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{658C68FB-53DF-495C-A2E0-74E890663911}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{658C68FB-53DF-495C-A2E0-74E890663911}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8A338BCB-208E-4A14-AB06-0D5BFC369DED}
+	EndGlobalSection
+EndGlobal
