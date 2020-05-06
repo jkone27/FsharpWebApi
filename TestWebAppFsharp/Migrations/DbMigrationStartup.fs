@@ -25,7 +25,9 @@ type DbMigrationStartup(dbConfigurationOptions: IOptions<DbConfiguration>, logge
     let upgradeEngine = u2.WithTransaction().LogTo(new UgradeLog<DbMigrationStartup>(logger)).Build()
 
     interface IStartupFilter with
-        member _.Configure(next) = 
+        member _.Configure(next) =
+        
+            EnsureDatabase.For.SqlDatabase(dbConfiguration.ConnectionString)
             
             do match upgradeEngine.IsUpgradeRequired() with
                 |true -> 

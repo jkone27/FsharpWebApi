@@ -32,7 +32,7 @@ type Startup(configuration: IConfiguration) =
         //needed for swagger
         services.AddMvc() |> ignore
         services.AddSwaggerGen(fun c ->
-            c.SwaggerDoc("v1", new OpenApiInfo( Title = "My API", Version = "v1" ))
+            c.SwaggerDoc("v1", new OpenApiInfo( Title = "Persons API", Version = "v1" ))
         )  |> ignore
 
     member _.Configure(app: IApplicationBuilder, env: IWebHostEnvironment) =
