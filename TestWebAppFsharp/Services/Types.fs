@@ -1,7 +1,10 @@
 ﻿namespace Services
 
 open FSharp.Data
+open SwaggerProvider
 open FSharp.Data.Sql
+
+
 
 [<AutoOpen>]
 module ProvidedTypes =
@@ -14,6 +17,11 @@ module ProvidedTypes =
     let ctxFactory connectionStringRuntime = 
         sql.GetDataContext(connectionStringRuntime: string)
 
+    type PetsEndpointProvider = OpenApiClientProvider<"https://petstore.swagger.io/v2/swagger.json">
+    
+    let petsClientFactory httpClient = 
+        PetsEndpointProvider.Client(httpClient)
+
 [<CLIMutable>]
 type PersonDto = { Name: string; Age : int; Id: int }
     with static member Map(person : sql.dataContext.``dbo.PersonsEntity``) = 
@@ -22,3 +30,4 @@ type PersonDto = { Name: string; Age : int; Id: int }
 type AppSettingsProvider = JsonProvider<"appsettings.json">
 
 type AppSettings = AppSettingsProvider.Root
+

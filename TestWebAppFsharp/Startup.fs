@@ -27,14 +27,17 @@ type Startup(configuration: IConfiguration) =
         services.AddSingleton<PersonsRepository>() |> ignore
         services.AddTransient<IStartupFilter, DbMigrationStartup>() |> ignore
 
-        //configuration
+        //configuration using FSharp.Data type provider
         let settingsFile = "appsettings." + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") + ".json";
         let config = AppSettingsProvider.Load(settingsFile)
 
         //bind does not work with provided types, for options need to use normal classes
         //configuration.GetSection("DbConfiguration").Bind(config.DbConfiguration)
         
+        //add once and never change (just add changes in appsettings.json!!!)
         services.AddSingleton<AppSettings>(config) |> ignore
+        services.AddHttpClient<PetsApiClient>() |> ignore
+        services.AddHostedService<PetsBackgroundJob>() |> ignore
 
         //needed for swagger
         services.AddMvc() |> ignore
