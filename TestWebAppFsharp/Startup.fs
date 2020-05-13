@@ -10,30 +10,39 @@ open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.Options
 open Services
 open Microsoft.OpenApi.Models
-open AppConfiguration
 open Migrations
+
+[<AutoOpen>]
+module ConfigurationExtensions = 
+    type Microsoft.Extensions.Configuration.IConfiguration with 
+        member _.Bind2(obj : AppSettings) : unit =
+            ()
+        
 
 type Startup(configuration: IConfiguration) =
 
     member _.ConfigureServices(services: IServiceCollection) =
-        services.AddControllers() |> ignore
+        
         services.AddSingleton<INumbersService, NumbersService>() |> ignore
         services.AddSingleton<PersonsRepository>() |> ignore
         services.AddTransient<IStartupFilter, DbMigrationStartup>() |> ignore
 
         //configuration
-        let configurationFunction = 
-            new System.Action<_>(
-                fun (opt :DbConfiguration) ->  
-                    configuration.GetSection("DbConfiguration").Bind(opt)) 
+        let settingsFile = "appsettings." + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") + ".json";
+        let config = AppSettingsProvider.Load(settingsFile)
+
+        //bind does not work with provided types, for options need to use normal classes
+        //configuration.GetSection("DbConfiguration").Bind(config.DbConfiguration)
         
-        services.Configure<DbConfiguration>(configurationFunction) |> ignore
+        services.AddSingleton<AppSettings>(config) |> ignore
 
         //needed for swagger
         services.AddMvc() |> ignore
         services.AddSwaggerGen(fun c ->
             c.SwaggerDoc("v1", new OpenApiInfo( Title = "Persons API", Version = "v1" ))
         )  |> ignore
+
+        services.AddControllers() |> ignore
 
     member _.Configure(app: IApplicationBuilder, env: IWebHostEnvironment) =
         if env.IsDevelopment() then

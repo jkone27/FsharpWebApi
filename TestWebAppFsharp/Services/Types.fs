@@ -1,17 +1,24 @@
-﻿[<AutoOpen>]
-module Types
+﻿namespace Services
 
+open FSharp.Data
 open FSharp.Data.Sql
 
-[<Literal>]
-let connectionString = "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=test;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+[<AutoOpen>]
+module ProvidedTypes =
 
-type sql = SqlDataProvider<Common.DatabaseProviderTypes.MSSQLSERVER, connectionString>
+    [<Literal>]
+    let private connectionString = "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=test;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
 
-let ctxFactory connectionStringRuntime = 
-    sql.GetDataContext(connectionStringRuntime: string)
+    type sql = SqlDataProvider<Common.DatabaseProviderTypes.MSSQLSERVER, connectionString>
+
+    let ctxFactory connectionStringRuntime = 
+        sql.GetDataContext(connectionStringRuntime: string)
 
 [<CLIMutable>]
 type PersonDto = { Name: string; Age : int; Id: int }
     with static member Map(person : sql.dataContext.``dbo.PersonsEntity``) = 
             { Name = person.Name; Age = person.Age; Id = person.Id }
+
+type AppSettingsProvider = JsonProvider<"appsettings.json">
+
+type AppSettings = AppSettingsProvider.Root

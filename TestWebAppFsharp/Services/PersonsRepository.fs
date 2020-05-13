@@ -1,11 +1,9 @@
 ﻿namespace Services
-
-open AppConfiguration
 open Microsoft.Extensions.Options
 
-type PersonsRepository(options: IOptions<DbConfiguration>) =
+type PersonsRepository(options: AppSettings) =
     
-    let ctx = ctxFactory options.Value.ConnectionString
+    let ctx = ctxFactory options.DbConfiguration.ConnectionString
     //https://fsprojects.github.io/SQLProvider/core/querying.html
     //https://fsprojects.github.io/SQLProvider/core/async.html
 

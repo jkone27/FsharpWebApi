@@ -5,12 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="AppConfiguration\Types.fs" />
     <EmbeddedResource Include="Scripts\01 - CreatePersons.sql" />
-    <Compile Include="Migrations\DbMigrationStartup.fs" />
     <Compile Include="Services\NumbersService.fs" />
     <Compile Include="Services\Types.fs" />
     <Compile Include="Services\PersonsRepository.fs" />
+    <Compile Include="Migrations\DbMigrationStartup.fs" />
     <Compile Include="Controllers\PersonsController.fs" />
     <Compile Include="Controllers\NumbersController.fs" />
     <Compile Include="Startup.fs" />
@@ -19,6 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="dbup-sqlserver" Version="4.3.1" />
+    <PackageReference Include="FSharp.Data" Version="3.3.3" />
     <PackageReference Include="SQLProvider" Version="1.1.86" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />

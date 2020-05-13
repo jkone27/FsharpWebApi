@@ -5,7 +5,7 @@ open Services
 
 
 [<Route("api")>]
-type PersonsController(personsRepository: PersonsRepository) as this = 
+type PersonsController(personsRepository: PersonsRepository) as this = //note : this is needed here!
     inherit ControllerBase()
 
 
@@ -28,7 +28,7 @@ type PersonsController(personsRepository: PersonsRepository) as this =
         } |> Async.StartAsTask
 
     
-    [<Route("persons/{id}")>]
+    [<Route("persons")>]
     [<HttpPut>]
     member _.UpdatePerson([<FromBody>] personDto) =
        async {

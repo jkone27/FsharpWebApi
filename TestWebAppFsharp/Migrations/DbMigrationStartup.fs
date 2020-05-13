@@ -4,9 +4,9 @@ open Microsoft.AspNetCore.Hosting
 open DbUp
 open Microsoft.Extensions.Options
 open Microsoft.Extensions.Logging
-open AppConfiguration
 open DbUp.Engine.Output
 open System.Reflection
+open Services
 
 type UgradeLog<'a>(logger: ILogger<'a>) =
     interface IUpgradeLog with
@@ -17,17 +17,17 @@ type UgradeLog<'a>(logger: ILogger<'a>) =
         member _.WriteWarning(format : string, args :  System.Object[]) = 
             logger.LogError (format, args)
 
-type DbMigrationStartup(dbConfigurationOptions: IOptions<DbConfiguration>, logger: ILogger<DbMigrationStartup>) =
+type DbMigrationStartup(settings: AppSettings, logger: ILogger<DbMigrationStartup>) =
 
-    let dbConfiguration = dbConfigurationOptions.Value;
-    let u1 = DeployChanges.To.SqlDatabase(dbConfiguration.ConnectionString)
+    let connectionString : string = settings.DbConfiguration.ConnectionString
+    let u1 = DeployChanges.To.SqlDatabase(connectionString)
     let u2 = u1.WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
     let upgradeEngine = u2.WithTransaction().LogTo(new UgradeLog<DbMigrationStartup>(logger)).Build()
 
     interface IStartupFilter with
         member _.Configure(next) =
         
-            EnsureDatabase.For.SqlDatabase(dbConfiguration.ConnectionString)
+            EnsureDatabase.For.SqlDatabase(connectionString)
             
             do match upgradeEngine.IsUpgradeRequired() with
                 |true -> 
