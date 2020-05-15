@@ -1,4 +1,5 @@
 ﻿using AutoMapper.Configuration;
+using CSharp.Contract;
 using CSharpWebApiSample.AppConfiguration;
 using CSharpWebApiSample.Domain;
 using Microsoft.Extensions.Options;
