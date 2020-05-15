@@ -10,13 +10,14 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
+open TerseIgnore
 
 module Program =
 
     let CreateHostBuilder args =
         Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(fun webBuilder ->
-                webBuilder.UseStartup<Startup>() |> ignore
+                !webBuilder.UseStartup<Startup>()
             )
 
     [<EntryPoint>]

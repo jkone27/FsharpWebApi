@@ -12,10 +12,13 @@ open Services
 open Microsoft.OpenApi.Models
 open Migrations
 
-type Startup(configuration: IConfiguration) =
-
+module TerseIgnore =
     //readability trick
     let (!) a = a |> ignore
+
+open TerseIgnore
+
+type Startup(configuration: IConfiguration) =
 
     member _.ConfigureServices(services: IServiceCollection) =
 
@@ -28,7 +31,7 @@ type Startup(configuration: IConfiguration) =
         let config = AppSettingsProvider.Load(settingsFile)
 
         //bind does not work with provided types, for options need to use normal classes
-        //configuration.GetSection("DbConfiguration").Bind(config.DbConfiguration)
+        //!configuration.GetSection("DbConfiguration").Bind(config.DbConfiguration)
         
         //add once and never change (just add changes in appsettings.json!!!)
         !services.AddSingleton<AppSettings>(config)
@@ -41,7 +44,7 @@ type Startup(configuration: IConfiguration) =
             c.SwaggerDoc("v1", new OpenApiInfo( Title = "Persons API", Version = "v1" ))
         )
 
-        services.AddControllers()
+        !services.AddControllers()
 
     member _.Configure(app: IApplicationBuilder, env: IWebHostEnvironment) =
         if env.IsDevelopment() then
