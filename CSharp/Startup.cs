@@ -19,6 +19,7 @@ using AutoMapper;
 using System.Reflection;
 using CSharpWebApiSample.Services;
 using CSharpWebApiSample;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApplication2
 {
@@ -72,6 +73,7 @@ namespace WebApplication2
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapGet("/", context => context.Response.WriteAsync("Welcome to C#!"));
             });
 
             //needed for swagger

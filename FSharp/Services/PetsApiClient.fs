@@ -10,5 +10,11 @@ type PetsApiClient(httpClient: HttpClient, appSettings: AppSettings) =
     do httpClient.BaseAddress <- Uri(baseAddress)
     let client = petsClientFactory(httpClient)
     
-    member _.GetAsync() = client.FindPetsByStatus([|"available"|])
+    member _.GetAsync() = 
+        async {
+            let! pets = client.FindPetsByStatus([|"available"|]) |> Async.AwaitTask
+
+            return pets |> Seq.take(10)
+        }
+        
 

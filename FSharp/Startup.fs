@@ -58,6 +58,7 @@ type Startup(configuration: IConfiguration) =
 
         app.UseEndpoints(fun endpoints ->
             endpoints.MapControllers() |> ignore
+            endpoints.MapGet("/", fun context -> context.Response.WriteAsync("Welcome to F#!")) |> ignore
             ) |> ignore
 
         //needed for swagger
