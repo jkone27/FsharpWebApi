@@ -12,20 +12,16 @@ open Services
 open Microsoft.OpenApi.Models
 open Migrations
 
-[<AutoOpen>]
-module ConfigurationExtensions = 
-    type Microsoft.Extensions.Configuration.IConfiguration with 
-        member _.Bind2(obj : AppSettings) : unit =
-            ()
-        
-
 type Startup(configuration: IConfiguration) =
 
+    //readability trick
+    let (!) a = a |> ignore
+
     member _.ConfigureServices(services: IServiceCollection) =
-        
-        services.AddSingleton<INumbersService, NumbersService>() |> ignore
-        services.AddSingleton<PersonsRepository>() |> ignore
-        services.AddTransient<IStartupFilter, DbMigrationStartup>() |> ignore
+
+        !services.AddSingleton<INumbersService, NumbersService>()
+        !services.AddSingleton<PersonsRepository>()
+        !services.AddTransient<IStartupFilter, DbMigrationStartup>()
 
         //configuration using FSharp.Data type provider
         let settingsFile = "appsettings." + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") + ".json";
@@ -35,34 +31,34 @@ type Startup(configuration: IConfiguration) =
         //configuration.GetSection("DbConfiguration").Bind(config.DbConfiguration)
         
         //add once and never change (just add changes in appsettings.json!!!)
-        services.AddSingleton<AppSettings>(config) |> ignore
-        services.AddHttpClient<PetsApiClient>() |> ignore
-        services.AddHostedService<PetsBackgroundJob>() |> ignore
+        !services.AddSingleton<AppSettings>(config)
+        !services.AddHttpClient<PetsApiClient>()
+        !services.AddHostedService<PetsBackgroundJob>()
 
         //needed for swagger
-        services.AddMvc() |> ignore
-        services.AddSwaggerGen(fun c ->
+        !services.AddMvc()
+        !services.AddSwaggerGen(fun c ->
             c.SwaggerDoc("v1", new OpenApiInfo( Title = "Persons API", Version = "v1" ))
-        )  |> ignore
+        )
 
-        services.AddControllers() |> ignore
+        services.AddControllers()
 
     member _.Configure(app: IApplicationBuilder, env: IWebHostEnvironment) =
         if env.IsDevelopment() then
-            app.UseDeveloperExceptionPage() |> ignore
+            !app.UseDeveloperExceptionPage()
 
-        app.UseHttpsRedirection() |> ignore
-        app.UseRouting() |> ignore
+        !app.UseHttpsRedirection()
+        !app.UseRouting()
 
-        app.UseAuthorization() |> ignore
+        !app.UseAuthorization()
 
-        app.UseEndpoints(fun endpoints ->
-            endpoints.MapControllers() |> ignore
-            endpoints.MapGet("/", fun context -> context.Response.WriteAsync("Welcome to F#!")) |> ignore
-            ) |> ignore
+        !app.UseEndpoints(fun endpoints ->
+            !endpoints.MapControllers()
+            !endpoints.MapGet("/", fun context -> context.Response.WriteAsync("Welcome to F#!"))
+            )
 
         //needed for swagger
-        app.UseSwagger() |> ignore
-        app.UseSwaggerUI(fun c ->
+        !app.UseSwagger()
+        !app.UseSwaggerUI(fun c ->
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1")
-        ) |> ignore
+        )
