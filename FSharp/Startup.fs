@@ -27,7 +27,7 @@ type Startup(configuration: IConfiguration) =
         !services.AddTransient<IStartupFilter, DbMigrationStartup>()
 
         //configuration using FSharp.Data type provider
-        let settingsFile = "appsettings." + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") + ".json";
+        let settingsFile = "appsettings." + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") + ".json"
         let config = AppSettingsProvider.Load(settingsFile)
 
         //bind does not work with provided types, for options need to use normal classes
