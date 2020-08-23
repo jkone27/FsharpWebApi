@@ -41,6 +41,8 @@
     <Compile Include="Services\PetsBackgroundJob.fs" />
     <Compile Include="Migrations\DbMigrationStartup.fs" />
     <EmbeddedResource Include="Scripts\01 - CreatePersons.sql" />
+    <Compile Include="UserInterface.fs" />
+    <Compile Include="HttpHandlers.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
@@ -50,6 +52,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
-  <ItemGroup />
 </Project>
