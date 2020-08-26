@@ -37,3 +37,20 @@ module UI =
             p [] [ encodedText model.Text ]
             a [ _href "/swagger" ] [ encodedText "swagger" ]
         ] |> layout
+
+
+module FelizUi =
+    open Feliz.ViewEngine
+    open Feliz.Bulma.ViewEngine //todo does not render bulma components..
+
+        let index (model : Message) =
+           Bulma.container [
+                Html.h1 "test from Feliz"
+                Bulma.button.a [
+                    color.isWarning
+                    prop.text model.Text
+                ]
+           ]
+           
+    
+

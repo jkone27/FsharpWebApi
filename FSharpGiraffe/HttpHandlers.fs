@@ -18,6 +18,12 @@ let indexHandler (name : string) =
     let view = UI.index model
     htmlView view
 
+let indexHandlerFeliz (name : string) =
+    let greetings = sprintf "Hello %s, from Giraffe!" name
+    let model = { Text = greetings }
+    let view = FelizUi.index model
+    htmlString (Feliz.ViewEngine.Render.htmlDocument view)
+
 let loadSwaggerDefinition =
     text (OpenApiSpecProvider.GetSample().JsonValue.ToString())
 
@@ -43,7 +49,7 @@ let webApp : HttpHandler =
         GET >=>
             choose [
                 route "/" >=> indexHandler "world"
-                routef "/hello/%s" indexHandler
+                routef "/hello/%s" indexHandlerFeliz
                 routef "/api/hello/%s" handleGetHelloWithName
                 route "/swagger/v1/swagger.json" >=> loadSwaggerDefinition
                 routef "/api/persons/%i" getPerson
