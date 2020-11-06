@@ -2,48 +2,54 @@
 
 open Microsoft.AspNetCore.Mvc
 open Services
+open FSharp.Control.Tasks.V2
 
 
+[<ApiController>]
 [<Route("api")>]
-type PersonsController(personsRepository: PersonsRepository) as this = //note : this is needed here!
+type PersonsController(personsRepository: PersonsRepository) as this =
     inherit ControllerBase()
 
 
     [<Route("persons/{id}")>]
     [<HttpGet>]
     member _.GetPersonsByIdAsync([<FromRoute>]id) =
-       async {
-            let result = personsRepository.GetPersonById(id)
-            match result with
-            |Some(r) -> return this.Ok(r) :> IActionResult
-            |_ -> return this.NotFound(id) :> IActionResult
-        } |> Async.StartAsTask
+        task {
+            let result = personsRepository.GetPersonById(id) 
+
+            let httpResult = 
+                match result with
+                |Some(r) ->  this.Ok(r) :> IActionResult
+                |_ ->  this.NotFound(id) :> IActionResult
+
+            return httpResult
+        }
 
     [<Route("persons")>]
     [<HttpPost>]
     member _.InsertPerson([<FromBody>] personDto) =
-       async {
+       task {
             personsRepository.InsertPerson(personDto)
-            return this.Ok(personDto) :> IActionResult
-        } |> Async.StartAsTask
+            return this.Ok(personDto)
+        }
 
     
     [<Route("persons")>]
     [<HttpPut>]
     member _.UpdatePerson([<FromBody>] personDto) =
-       async {
+       task {
             personsRepository.UpdatePerson(personDto)
-            return this.Ok(personDto) :> IActionResult
-        } |> Async.StartAsTask
+            return this.Ok(personDto)
+        }
 
     
     [<Route("persons/{id}")>]
     [<HttpDelete>]
     member _.DeletePerson([<FromRoute>] id) =
-       async {
+       task {
             personsRepository.DeletePerson(id)
-            return this.StatusCode(204) :> IActionResult
-        } |> Async.StartAsTask
+            return this.StatusCode(204)
+        }
 
         
 

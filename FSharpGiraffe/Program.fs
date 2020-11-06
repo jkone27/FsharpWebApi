@@ -37,6 +37,7 @@ let configureApp (app : IApplicationBuilder) =
         .UseHttpsRedirection()
         .UseCors(configureCors)
         .UseStaticFiles()
+        //https://github.com/microsoft/OpenAPI.NET to write the file?
         //swagger is not self generated, so we need to adjust the json manually for now..
         .UseSwaggerUI(Action<_>(fun c -> c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1")))
         .UseGiraffe(webApp)

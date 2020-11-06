@@ -6,14 +6,12 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\01 - CreatePersons.sql" />
-    <Compile Include="Services\NumbersService.fs" />
     <Compile Include="Services\Types.fs" />
     <Compile Include="Services\PetsApiClient.fs" />
     <Compile Include="Services\PetsBackgroundJob.fs" />
     <Compile Include="Services\PersonsRepository.fs" />
     <Compile Include="Migrations\DbMigrationStartup.fs" />
     <Compile Include="Controllers\PersonsController.fs" />
-    <Compile Include="Controllers\NumbersController.fs" />
     <Compile Include="Startup.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
@@ -25,6 +23,7 @@
     <PackageReference Include="SwaggerProvider" Version="0.10.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <PackageReference Include="TaskBuilder.fs" Version="2.1.0" />
   </ItemGroup>
 
 </Project>

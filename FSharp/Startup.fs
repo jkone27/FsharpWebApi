@@ -22,7 +22,6 @@ type Startup(configuration: IConfiguration) =
 
     member _.ConfigureServices(services: IServiceCollection) =
 
-        !services.AddSingleton<INumbersService, NumbersService>()
         !services.AddSingleton<PersonsRepository>()
         !services.AddTransient<IStartupFilter, DbMigrationStartup>()
 
