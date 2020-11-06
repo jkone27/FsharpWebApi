@@ -6,6 +6,8 @@ Features:
 * CRUD controller to access a simple Persons Entity.
 * Background Job to call petstore api via apiClient and print a message to log
 
+A [medium article](https://jkone27-3876.medium.com/comparing-f-and-c-in-real-life-asp-net-core-aebd32812ce3) describing the repository
+
 ## C#
 
 Uses EF core SQL server, ef migrations
