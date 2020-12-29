@@ -1,6 +1,8 @@
 ﻿namespace Services
 open Microsoft.Extensions.Options
 
+//https://github.com/fsprojects/SQLProvider/blob/master/tests/SqlProvider.Tests/Readme.md
+
 type PersonsRepository(options: AppSettings) =
     
     let ctx = ctxFactory options.DbConfiguration.ConnectionString
@@ -18,6 +20,19 @@ type PersonsRepository(options: AppSettings) =
         getDbPerson id
         |> Option.map PersonDto.Map
 
+    member _.GetPeople (?skipN, ?takeN) =
+        let s = defaultArg skipN 0
+        let t = defaultArg takeN 100
+        query {
+            for person in ctx.Dbo.Persons do
+            sortBy person.Id
+            select (person)
+            skip s
+            take t
+        } 
+        |> Seq.map PersonDto.Map
+        |> Seq.toList
+
     member _.GetPersonsByName(name) =
         query {
             for person in ctx.Dbo.Persons do
@@ -29,28 +44,39 @@ type PersonsRepository(options: AppSettings) =
 
     member _.InsertPerson(personDto) =
        
-       let dbPerson = ctx.Dbo.Persons.Create()
+       let mutable dbPerson = ctx.Dbo.Persons.Create()
        dbPerson.Age <- personDto.Age
        dbPerson.Name <- personDto.Name
        
-       ctx.SubmitUpdates();
+       ctx.SubmitUpdates()
+
+       dbPerson |> PersonDto.Map
 
     member _.DeletePerson(id) =
 
-       getDbPerson id 
+       let dbPersonOption = getDbPerson id 
+       
+       dbPersonOption
        |> Option.iter (fun dbPerson -> 
            dbPerson.Delete())
 
-       ctx.SubmitUpdates();
+       ctx.SubmitUpdates()
+
+       dbPersonOption.IsSome
 
     member _.UpdatePerson(personDto) =
    
-       getDbPerson personDto.Id 
+       let mutable dbPersonOption = getDbPerson personDto.Id 
+       
+       dbPersonOption
        |> Option.iter (fun dbPerson ->
            dbPerson.Age <- personDto.Age
            dbPerson.Name <- personDto.Name
        )
    
-       ctx.SubmitUpdates();
+       ctx.SubmitUpdates()
+
+       dbPersonOption 
+       |> Option.map PersonDto.Map
         
 

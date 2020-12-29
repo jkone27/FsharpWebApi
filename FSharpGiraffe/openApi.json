@@ -119,6 +119,18 @@
             "description": "Success"
           }
         }
+      },
+      "get": {
+        "tags": [
+          "Persons"
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
       }
     }
   },

@@ -8,6 +8,8 @@ open FSharp.Control.Tasks.V2
 open UserInterface
 open Microsoft.AspNetCore.Http
 
+// https://github.com/giraffe-fsharp/Giraffe/blob/master/DOCUMENTATION.md
+
 // ---------------------------------
 // Web app
 // ---------------------------------
@@ -33,7 +35,7 @@ let handleGetHelloWithName (name: string) =
         let response = {|
             Text = sprintf "Hello, %s" name
         |}
-        return! json response next ctx
+        return! negotiate response next ctx
     }
 
 let getPerson (id : int) : HttpHandler = 
@@ -41,7 +43,69 @@ let getPerson (id : int) : HttpHandler =
     task {
         let personsRepository = ctx.GetService<PersonsRepository>()
         let response = personsRepository.GetPersonById id
-        return! json response next ctx
+        match response with
+        |Some(r) -> 
+             return! json r next ctx
+        |None ->
+            return! RequestErrors.NOT_FOUND( $"person: {id} - not found" ) next ctx
+    }
+
+let getPeople (skipN,takeN) : HttpHandler = 
+    fun next ctx -> 
+    task {
+        let personsRepository = ctx.GetService<PersonsRepository>()
+        let response = personsRepository.GetPeople(skipN, takeN)
+        match response with
+        |x::xs -> 
+             return! json response next ctx
+        |[] ->
+            return! RequestErrors.NOT_FOUND( $"no people found" ) next ctx
+    }
+
+let getPeopleByName name : HttpHandler = 
+    fun next ctx -> 
+    task {
+        let personsRepository = ctx.GetService<PersonsRepository>()
+        let response = personsRepository.GetPersonsByName name
+        match response with
+        |x::xs -> 
+             return! json response next ctx
+        |[] ->
+            return! RequestErrors.NOT_FOUND( $"no people found" ) next ctx
+    }
+
+let storePerson : HttpHandler =
+    fun next ctx ->
+    task {
+        let personsRepository = ctx.GetService<PersonsRepository>()
+        let! personDto = ctx.BindModelAsync<_>()
+        let result = personsRepository.InsertPerson personDto
+        return! json result next ctx
+    }
+
+let updatePerson : HttpHandler =
+    fun next ctx ->
+    task {
+        let personsRepository = ctx.GetService<PersonsRepository>()
+        let! personDto = ctx.BindModelAsync<_>()
+        let result = personsRepository.UpdatePerson personDto
+        match result with
+        |Some(r) -> 
+            return! json r next ctx
+        |None ->
+            return! RequestErrors.NOT_FOUND( $"person: {id} - not found" ) next ctx
+    }
+
+let deletePerson (id : int) : HttpHandler =
+    fun next ctx ->
+    task {
+        let personsRepository = ctx.GetService<PersonsRepository>()
+        let result = personsRepository.DeletePerson id
+        match result with
+        |true -> 
+            return! Successful.accepted( negotiate $"person: {id} deleted") next ctx
+        |false ->
+            return! RequestErrors.NOT_FOUND( $"person: {id} - not found" ) next ctx
     }
 
 let webApp : HttpHandler =
@@ -53,6 +117,21 @@ let webApp : HttpHandler =
                 routef "/api/hello/%s" handleGetHelloWithName
                 route "/swagger/v1/swagger.json" >=> loadSwaggerDefinition
                 routef "/api/persons/%i" getPerson
+                routef "/api/persons?skip=%i&take=%i" getPeople
+                route "/api/persons" >=> getPeople (0,100)
+                routef "/api/persons/%s" getPeopleByName
+            ]
+        POST >=>
+            choose [
+                route "/api/persons" >=> storePerson
+            ]
+        PUT >=>
+            choose [
+                route "/api/persons" >=> updatePerson
+            ]
+        DELETE >=>
+            choose [
+                routef "/api/persons/%i" deletePerson
             ]
         setStatusCode 404 >=> text "Not Found" ]
 
