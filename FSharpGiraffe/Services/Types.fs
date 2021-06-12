@@ -12,6 +12,9 @@ module ProvidedTypes =
     [<Literal>]
     let private connectionString = "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=test;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
 
+    // TODO, fix for unix:  error FS3033: 
+    // The type provider 'FSharp.Data.Sql.SqlTypeProvider' reported an error: 
+    // System.Data.SqlClient is not supported on this platform.
     type sql = SqlDataProvider<Common.DatabaseProviderTypes.MSSQLSERVER, connectionString>
 
     let ctxFactory connectionStringRuntime = 
