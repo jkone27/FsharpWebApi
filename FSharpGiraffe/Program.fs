@@ -11,6 +11,7 @@ open Microsoft.Extensions.DependencyInjection
 open Giraffe
 open Services
 open Migrations
+open Saturn
 open HttpHandlers
 
 module TerseIgnore =
@@ -30,17 +31,18 @@ let configureCors (builder : CorsPolicyBuilder) =
            |> ignore
 
 let configureApp (app : IApplicationBuilder) =
+    
     let env = app.ApplicationServices.GetService<IWebHostEnvironment>()
+
     (match env.EnvironmentName with
-    | "Development" -> app.UseDeveloperExceptionPage()
-    | _ -> app.UseGiraffeErrorHandler(errorHandler))
-        .UseHttpsRedirection()
+        | "Development" -> app.UseDeveloperExceptionPage()
+        | _ -> app.UseGiraffeErrorHandler(errorHandler)
+    ).UseHttpsRedirection()
         .UseCors(configureCors)
-        .UseStaticFiles()
         //https://github.com/microsoft/OpenAPI.NET to write the file?
         //swagger is not self generated, so we need to adjust the json manually for now..
-        .UseSwaggerUI(Action<_>(fun c -> c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1")))
-        .UseGiraffe(webApp)
+        .UseSwaggerUI(Action<_>(fun (c: Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIOptions) -> 
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1")))
 
 let configureServices (services : IServiceCollection) =
     
@@ -61,25 +63,28 @@ let configureServices (services : IServiceCollection) =
     !services.AddHttpClient<PetsApiClient>()
     !services.AddHostedService<PetsBackgroundJob>()
 
+    services
+
 let configureLogging (builder : ILoggingBuilder) =
     !builder.AddFilter(fun l -> l.Equals LogLevel.Error)
            .AddConsole()
            .AddDebug()
 
-[<EntryPoint>]
-let main args =
+let configureWebHostBuilder (webHostBuilder : IWebHostBuilder) =
     let contentRoot = Directory.GetCurrentDirectory()
     let webRoot     = Path.Combine(contentRoot, "WebRoot")
-    Host.CreateDefaultBuilder(args)
-        .ConfigureWebHostDefaults(
-            fun webHostBuilder ->
-                !webHostBuilder
-                    .UseContentRoot(contentRoot)
-                    .UseWebRoot(webRoot)
-                    .Configure(Action<IApplicationBuilder> configureApp)
-                    .ConfigureServices(configureServices)
-                    .ConfigureLogging(configureLogging)
-                    )
-        .Build()
-        .Run()
-    0
+    webHostBuilder
+        .UseContentRoot(contentRoot)
+        .UseWebRoot(webRoot)
+
+let app = application {
+    use_router webApp
+    logging configureLogging
+    service_config configureServices
+    app_config configureApp
+    use_static "static"
+    use_cors "cors_policy" configureCors
+    webhost_config configureWebHostBuilder
+}
+
+run app
