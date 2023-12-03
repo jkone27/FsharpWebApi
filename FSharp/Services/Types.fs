@@ -3,16 +3,33 @@
 open FSharp.Data
 open SwaggerProvider
 open FSharp.Data.Sql
-
+open Microsoft.Extensions.Logging.Abstractions
 
 
 [<AutoOpen>]
 module ProvidedTypes =
 
-    [<Literal>]
-    let private connectionString = "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=test;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+    let [<Literal>] dbVendor = Common.DatabaseProviderTypes.POSTGRESQL
 
-    type sql = SqlDataProvider<Common.DatabaseProviderTypes.MSSQLSERVER, connectionString>
+    let [<Literal>] connString ="Host=127.0.0.1;Database=yourdatabase;Username=yourusername;Password=yourpassword"
+
+    let [<Literal>] owner = "public, admin, references"
+
+    let [<Literal>] resPath = "~/.nuget/packages/npgsql/8.0.0"
+
+    let [<Literal>] indivAmount = 1000
+
+    let [<Literal>] useOptTypes  = true
+
+    type sql =
+        SqlDataProvider<
+            dbVendor,
+            connString,
+            "",         //ConnectionNameString can be left empty 
+            resPath,
+            indivAmount,
+            useOptTypes,
+            owner>
 
     let ctxFactory connectionStringRuntime = 
         sql.GetDataContext(connectionStringRuntime: string)
