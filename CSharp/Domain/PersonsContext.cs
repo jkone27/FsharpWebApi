@@ -16,16 +16,16 @@ namespace CSharpWebApiSample.Domain
         {
             connectionString = options.Value.ConnectionString;
         }
-       
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.UseNpgsql(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Person>()
-                 .HasKey(p => p.Id);
+                .HasKey(p => p.Id);
         }
     }
 }
