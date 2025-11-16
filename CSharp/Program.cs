@@ -15,6 +15,7 @@ using CSharpWebApiSample.Services;
 using Microsoft.OpenApi.Models;
 using CSharpWebApiSample;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder();
 
@@ -43,7 +44,6 @@ services.AddHostedService<PetsBackgroundJob>();
 
 var env = builder.Environment;
 
-
 // configure application
 var app = builder.Build();
 
@@ -62,5 +62,10 @@ app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 });
+
+// run migrations at startup
+using var scope = app.Services.CreateScope();
+var db = scope.ServiceProvider.GetRequiredService<PersonsContext>();
+db.Database.Migrate();
 
 app.Run();

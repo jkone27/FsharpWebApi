@@ -11,15 +11,16 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CSharp.Migrations
 {
     [DbContext(typeof(PersonsContext))]
-    [Migration("20231203151617_InitializeDb")]
-    partial class InitializeDb
+    [Migration("20251116163758_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasDefaultSchema("dbo")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -40,7 +41,7 @@ namespace CSharp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Persons");
+                    b.ToTable("persons", "dbo");
                 });
 #pragma warning restore 612, 618
         }

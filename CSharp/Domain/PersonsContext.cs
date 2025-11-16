@@ -1,6 +1,7 @@
 ﻿using CSharpWebApiSample.AppConfiguration;
 using CSharpWebApiSample.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Options;
 using System.Data.Common;
 

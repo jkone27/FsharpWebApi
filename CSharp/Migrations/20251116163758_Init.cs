@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CSharp.Migrations
 {
     /// <inheritdoc />
-    public partial class InitializeDb : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,14 +19,14 @@ namespace CSharp.Migrations
                 schema: "dbo",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
-                    age = table.Column<int>(type: "integer", nullable: true)
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Age = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_persons", x => x.id);
+                    table.PrimaryKey("PK_persons", x => x.Id);
                 });
         }
 
@@ -39,4 +39,3 @@ namespace CSharp.Migrations
         }
     }
 }
-
