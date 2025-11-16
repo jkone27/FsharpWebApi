@@ -4,30 +4,39 @@ open Microsoft.AspNetCore.Hosting
 open DbUp
 open Microsoft.Extensions.Options
 open Microsoft.Extensions.Logging
-open DbUp.Engine.Output
+open DbUp.Engine
 open System.Reflection
 open Services
 
-type UgradeLog<'a>(logger: ILogger<'a>) =
-    interface IUpgradeLog with
-        member _.WriteError(format : string, args : System.Object[]) = 
-            logger.LogError (format, args)
-        member _.WriteInformation(format : string, args :  System.Object[]) = 
-            logger.LogInformation (format, args)
-        member _.WriteWarning(format : string, args :  System.Object[]) = 
-            logger.LogError (format, args)
-
+type UpgradeLog<'a>(logger: ILogger<'a>) =
+    interface Output.IUpgradeLog with        
+        member _.LogDebug(format: string, args: obj array): unit = 
+            logger.LogDebug(format, args)
+        member _.LogError(format: string, args: obj array): unit = 
+            logger.LogError(format, args)
+        member _.LogError(ex: exn, format: string, args: obj array): unit = 
+            logger.LogError(ex, format, args)
+        member _.LogInformation(format: string, args: obj array): unit = 
+            logger.LogInformation(format, args)
+        member _.LogTrace(format: string, args: obj array): unit = 
+            logger.LogTrace(format, args)
+        member _.LogWarning(format: string, args: obj array): unit = 
+            logger.LogWarning(format, args)
+        
 type DbMigrationStartup(settings: AppSettings, logger: ILogger<DbMigrationStartup>) =
 
     let connectionString : string = settings.DbConfiguration.ConnectionString
-    let u1 = DeployChanges.To.SqlDatabase(connectionString)
-    let u2 = u1.WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
-    let upgradeEngine = u2.WithTransaction().LogTo(new UgradeLog<DbMigrationStartup>(logger)).Build()
+    let upgradeEngine = 
+        DeployChanges.To.PostgresqlDatabase(connectionString)
+            .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
+            .WithTransaction()
+            .LogTo(new UpgradeLog<DbMigrationStartup>(logger))
+            .Build()
 
     interface IStartupFilter with
         member _.Configure(next) =
         
-            EnsureDatabase.For.SqlDatabase(connectionString)
+            EnsureDatabase.For.PostgresqlDatabase(connectionString)
             
             do match upgradeEngine.IsUpgradeRequired() with
                 |true -> 
@@ -38,4 +47,3 @@ type DbMigrationStartup(settings: AppSettings, logger: ILogger<DbMigrationStartu
                 |false -> ()
             
             next
-

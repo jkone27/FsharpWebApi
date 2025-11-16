@@ -3,31 +3,54 @@
 open FSharp.Data
 open SwaggerProvider
 open FSharp.Data.Sql
-
+open System.Data
+open FSharp.Data.Sql.PostgreSql
 
 
 [<AutoOpen>]
 module ProvidedTypes =
 
+    // uses F# SQLProvider with PGSQL connection string for docker compose
+    // https://fsprojects.github.io/SQLProvider/core/postgresql.html
+    let [<Literal>] dbVendor = Common.DatabaseProviderTypes.POSTGRESQL
+    let [<Literal>] connString = "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=test"
+
     [<Literal>]
-    let private connectionString = "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=test;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+    let owner = "dbo"
 
-    type sql = SqlDataProvider<Common.DatabaseProviderTypes.MSSQLSERVER, connectionString>
+    [<Literal>]
+    let indivAmount = 1000
 
-    let ctxFactory connectionStringRuntime = 
+    [<Literal>]
+    let useOptTypes = Common.NullableColumnType.NO_OPTION
+
+    type sql =
+        SqlDataProvider<
+            DatabaseVendor = Common.DatabaseProviderTypes.POSTGRESQL,
+            ConnectionStringName = "",
+            ConnectionString=connString, 
+            IndividualsAmount = indivAmount,
+            UseOptionTypes=useOptTypes, 
+            Owner=owner>
+
+    let ctxFactory connectionStringRuntime =
         sql.GetDataContext(connectionStringRuntime: string)
 
     type PetsEndpointProvider = OpenApiClientProvider<"https://petstore.swagger.io/v2/swagger.json">
-    
-    let petsClientFactory httpClient = 
-        PetsEndpointProvider.Client(httpClient)
+
+    let petsClientFactory httpClient = PetsEndpointProvider.Client(httpClient=httpClient)
 
 [<CLIMutable>]
-type PersonDto = { Name: string; Age : int; Id: int }
-    with static member Map(person : sql.dataContext.``dbo.PersonsEntity``) = 
-            { Name = person.Name; Age = person.Age; Id = person.Id }
+type PersonDto =
+    { Name: string
+      Age: int
+      Id: int }
+
+    static member Map(person: sql.dataContext.``dbo.personsEntity``) =
+        { Name = person.Name
+          Age = person.Age
+          Id = person.Id }
 
 type AppSettingsProvider = JsonProvider<"appsettings.json">
 
 type AppSettings = AppSettingsProvider.Root
-

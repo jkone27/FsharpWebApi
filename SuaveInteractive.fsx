@@ -22,7 +22,7 @@ let cfg = {
     defaultConfig 
         with bindings = [ 
             HttpBinding.createSimple HTTP "127.0.0.1" 5000
-        ] 
+        ]
     }
 
 startWebServer cfg app

@@ -7,7 +7,7 @@ namespace CSharp.Contract
 {
     public class PetDto
     {
-        public int id { get; set; }
+        public long id { get; set; }
         public Category category { get; set; }
         public string name { get; set; }
         public string[] photoUrls { get; set; }

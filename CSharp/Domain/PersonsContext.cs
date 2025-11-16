@@ -1,6 +1,7 @@
 ﻿using CSharpWebApiSample.AppConfiguration;
 using CSharpWebApiSample.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Options;
 using System.Data.Common;
 
@@ -16,16 +17,19 @@ namespace CSharpWebApiSample.Domain
         {
             connectionString = options.Value.ConnectionString;
         }
-       
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.UseNpgsql(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasDefaultSchema("dbo");
+            
             modelBuilder.Entity<Person>()
-                 .HasKey(p => p.Id);
+                .ToTable("persons")
+                .HasKey(p => p.Id);
         }
     }
 }

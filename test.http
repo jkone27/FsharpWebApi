@@ -1,0 +1,16 @@
+# @name createPerson
+
+POST http://localhost:5000/api/persons
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "age": 30
+}
+
+###
+
+# @name getPerson
+GET http://localhost:5000/api/persons/{{createPerson.response.body.$.id}}
+Content-Type: application/json
+
