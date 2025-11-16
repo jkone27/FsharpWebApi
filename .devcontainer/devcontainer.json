@@ -15,9 +15,10 @@
 			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
 				"ms-dotnettools.csharp",
-				"ionide.fsharp",
+				"ionide.ionide-fsharp",
 				"ms-ossdata.vscode-postgresql",
-				"christian-kohler.path-intellisense"
+				"christian-kohler.path-intellisense",
+				"humao.rest-client"
 			]
 		}
 	},
