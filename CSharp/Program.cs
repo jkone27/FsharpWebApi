@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Http;
 var builder = WebApplication.CreateBuilder();
 
 var services = builder.Services;
-var Configuration = builder.Configuration;s
+var Configuration = builder.Configuration;
 
 // configure services
 services.AddControllers();
@@ -49,7 +49,7 @@ var app = builder.Build();
 
 if (env.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();s
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();

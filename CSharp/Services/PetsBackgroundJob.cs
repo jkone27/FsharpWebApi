@@ -29,7 +29,7 @@ namespace CSharpWebApiSample
             _logger.LogInformation("Timed Hosted Service running.");
 
             _timer = new Timer(DoWork, null, TimeSpan.Zero,
-                TimeSpan.FromSeconds(5));
+                TimeSpan.FromSeconds(30));
 
             return Task.CompletedTask;
         }

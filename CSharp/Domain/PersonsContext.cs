@@ -24,7 +24,10 @@ namespace CSharpWebApiSample.Domain
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasDefaultSchema("dbo");
+            
             modelBuilder.Entity<Person>()
+                .ToTable("persons")
                 .HasKey(p => p.Id);
         }
     }

@@ -4,7 +4,6 @@ open System
 open Microsoft.Extensions.Logging
 open Giraffe
 open Services
-open FSharp.Control.Tasks.V2
 open UserInterface
 open Microsoft.AspNetCore.Http
 

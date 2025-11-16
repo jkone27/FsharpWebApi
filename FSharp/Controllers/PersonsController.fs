@@ -2,14 +2,11 @@
 
 open Microsoft.AspNetCore.Mvc
 open Services
-open FSharp.Control.Tasks.V2
-
 
 [<ApiController>]
 [<Route("api")>]
 type PersonsController(personsRepository: PersonsRepository) as this =
     inherit ControllerBase()
-
 
     [<Route("persons/{id}")>]
     [<HttpGet>]
