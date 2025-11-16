@@ -36,6 +36,8 @@ type PersonsRepository(options: AppSettings) =
 
         ctx.SubmitUpdates()
 
+        dbPerson.Id
+
     member _.DeletePerson(id) =
 
         getDbPerson id

@@ -11,7 +11,7 @@
     <PackageReference Include="Feliz.Bulma.ViewEngine" Version="0.25.0" />
     <PackageReference Include="FSharp.Data" Version="6.3.0" />
     <PackageReference Include="Giraffe.ViewEngine" Version="1.4.0" />
-    <PackageReference Include="Npgsql" Version="8.0.7" />
+    <PackageReference Include="Npgsql" Version="9.0.4" />
     <PackageReference Include="Saturn" Version="0.16.1" />
     <PackageReference Include="SQLProvider.PostgreSql" Version="1.5.17" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />

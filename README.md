@@ -26,11 +26,19 @@ Shows a similar api just using Giraffe endpoints. a more modern version could us
 You can run this repository inside a dev container, to facilitate testing against PGSQL.
 
 * run `dotnet tool restore`
+* run `dotnet dev-certs https` if prompted for enabling dev certificates
 
 if you run locally (not via dev containers), remember to start first the `docker-compose.yaml` file in your podman or docker desktop or other container engine solution you might be using locally.
 
 * `dotnet build` to build and compile all projects.
 * `dotnet run --project CSharp` to run the C# variant
+
+note on F# type providers, the SQL type provider depends on pre-existing schema to compile your types,
+so ideally when working in code/editing, you should first update your SQL, run dbup, or efcore migrate.
+this is a bit counter intuitive, but forces your local code to be in sync with your local db. interesting? right. 
+
+for a quick setup u can either run C# first, or you can run `cd FSharp/Scripts && dotnet fsi sqlprovidertest.fsx` or create the schema yourself by connecting to pgsql locally.
+
 * `dotnet run --project FSharp` to run the F# variant
 * `dotnet run --project FSharpGiraffe` to run the F# variant with Giraffe - functional routing.
 
