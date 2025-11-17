@@ -4,7 +4,7 @@ POST http://localhost:5000/api/persons
 Content-Type: application/json
 
 {
-    "name": "John Doe",
+    "name": "Jim juju",
     "age": 30
 }
 
@@ -14,3 +14,20 @@ Content-Type: application/json
 GET http://localhost:5000/api/persons/{{createPerson.response.body.$.id}}
 Content-Type: application/json
 
+###
+
+# @name updatePerson
+PUT http://localhost:5000/api/persons
+Content-Type: application/json
+
+{
+    "id": "{{createPerson.response.body.$.id}}",
+    "name": "James Garmush",
+    "age": 31
+}
+
+###
+
+# @name deletePerson
+DELETE http://localhost:5000/api/persons/{{createPerson.response.body.$.id}}
+Content-Type: application/json

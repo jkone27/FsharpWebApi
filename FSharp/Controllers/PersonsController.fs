@@ -26,8 +26,8 @@ type PersonsController(personsRepository: PersonsRepository) as this =
     [<HttpPost>]
     member _.InsertPerson([<FromBody>] personDto) =
        task {
-            personsRepository.InsertPerson(personDto)
-            return this.Ok(personDto)
+            let id = personsRepository.InsertPerson(personDto)
+            return this.Ok({ personDto with Id = id })
         }
 
     
