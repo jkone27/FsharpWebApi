@@ -2,9 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <AssemblyName>FSharpGiraffe.App</AssemblyName>
-    <EnableDefaultContentItems>false</EnableDefaultContentItems>
   </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\01 - CreatePersons.sql" />
+    <Compile Include="Services\Types.fs" />
+    <Compile Include="Services\PersonsRepository.fs" />
+    <Compile Include="Services\PetsApiClient.fs" />
+    <Compile Include="Services\PetsBackgroundJob.fs" />
+    <Compile Include="Migrations\DbMigrationStartup.fs" />
+    <Compile Include="UserInterface.fs" />
+    <Compile Include="HttpHandlers.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="dbup-postgresql" Version="6.1.5" />
@@ -17,40 +27,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUi" Version="6.5.0" />
     <PackageReference Include="SwaggerProvider" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="appsettings.Development.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="openApi.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="appsettings.Local.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Compile Include="Services\Types.fs" />
-    <Compile Include="Services\PersonsRepository.fs" />
-    <Compile Include="Services\PetsApiClient.fs" />
-    <Compile Include="Services\PetsBackgroundJob.fs" />
-    <Compile Include="Migrations\DbMigrationStartup.fs" />
-    <EmbeddedResource Include="Scripts\01 - CreatePersons.sql" />
-    <Compile Include="UserInterface.fs" />
-    <Compile Include="HttpHandlers.fs" />
-    <Compile Include="Program.fs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="web.config" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

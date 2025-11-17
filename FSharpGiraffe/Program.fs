@@ -1,3 +1,5 @@
+#nowarn "20" 
+// ignore FS0020 on this file, since we use aspnet DI, no need to add |> ignore every time
 module FSharpGiraffe.App
 
 open System
@@ -5,20 +7,15 @@ open System.IO
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Cors.Infrastructure
 open Microsoft.AspNetCore.Hosting
-open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
 open Services
 open Migrations
 open Saturn
+open Saturn.Endpoint
 open HttpHandlers
 
-module TerseIgnore =
-    //readability trick
-    let (!) a = a |> ignore
-
-open TerseIgnore
 
 // ---------------------------------
 // Config and Main
@@ -46,10 +43,10 @@ let configureApp (app : IApplicationBuilder) =
 
 let configureServices (services : IServiceCollection) =
     
-    !services.AddCors()
-    !services.AddGiraffe()
-    !services.AddSingleton<PersonsRepository>()
-    !services.AddTransient<IStartupFilter, DbMigrationStartup>()
+    services.AddCors()
+    services.AddGiraffe()
+    services.AddSingleton<PersonsRepository>()
+    services.AddTransient<IStartupFilter, DbMigrationStartup>()
 
     //configuration using FSharp.Data type provider
     let settingsFile = "appsettings." + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") + ".json"
@@ -59,16 +56,17 @@ let configureServices (services : IServiceCollection) =
     //!configuration.GetSection("DbConfiguration").Bind(config.DbConfiguration)
           
     //add once and never change (just add changes in appsettings.json!!!)
-    !services.AddSingleton<AppSettings>(config)
-    !services.AddHttpClient<PetsApiClient>()
-    !services.AddHostedService<PetsBackgroundJob>()
+    services.AddSingleton<AppSettings>(config)
+    services.AddHttpClient<PetsApiClient>()
+    services.AddHostedService<PetsBackgroundJob>()
 
     services
 
 let configureLogging (builder : ILoggingBuilder) =
-    !builder.AddFilter(fun l -> l.Equals LogLevel.Error)
+    builder.AddFilter(fun l -> l.Equals LogLevel.Error)
            .AddConsole()
            .AddDebug()
+           |> ignore
 
 let configureWebHostBuilder (webHostBuilder : IWebHostBuilder) =
     let contentRoot = Directory.GetCurrentDirectory()
@@ -78,7 +76,7 @@ let configureWebHostBuilder (webHostBuilder : IWebHostBuilder) =
         .UseWebRoot(webRoot)
 
 let app = application {
-    use_router webApp
+    use_endpoint_router webApp
     logging configureLogging
     service_config configureServices
     app_config configureApp
