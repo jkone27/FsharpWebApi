@@ -50,9 +50,13 @@ let getPerson (id : int) : HttpHandler =
             return! RequestErrors.NOT_FOUND( $"person: {id} - not found" ) next ctx
     }
 
-let getPeople (skipN,takeN) : HttpHandler = 
+let getPeople : HttpHandler = 
     fun next ctx -> 
     task {
+        // Parse query params manually or use ctx.TryBindQueryString
+        let skipN = ctx.TryGetQueryStringValue "skip" |> Option.map int |> Option.defaultValue 0
+        let takeN = ctx.TryGetQueryStringValue "take" |> Option.map int |> Option.defaultValue 100
+
         let personsRepository = ctx.GetService<PersonsRepository>()
         let response = personsRepository.GetPeople(skipN, takeN)
         match response with
@@ -116,8 +120,7 @@ let webApp : Giraffe.EndpointRouting.Routers.Endpoint list =
         getf "/api/hello/%s" handleGetHelloWithName
         get "/swagger/v1/swagger.json" loadSwaggerDefinition
         getf "/api/persons/%i" getPerson
-        getf "/api/persons?skip=%i&take=%i" getPeople
-        get "/api/persons" (getPeople (0,100))
+        get "/api/persons" getPeople
         getf "/api/persons/%s" getPeopleByName
         
         // POST endpoints
