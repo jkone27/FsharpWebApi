@@ -2,10 +2,11 @@
 
 open System
 open Microsoft.Extensions.Logging
-open Giraffe
+open Saturn.Endpoint
 open Services
 open UserInterface
 open Microsoft.AspNetCore.Http
+open Giraffe
 
 // https://github.com/giraffe-fsharp/Giraffe/blob/master/DOCUMENTATION.md
 
@@ -107,32 +108,27 @@ let deletePerson (id : int) : HttpHandler =
             return! RequestErrors.NOT_FOUND( $"person: {id} - not found" ) next ctx
     }
 
-let webApp : HttpHandler =
-    choose [
-        GET >=>
-            choose [
-                route "/" >=> indexHandler "world"
-                routef "/hello/%s" indexHandlerFeliz
-                routef "/api/hello/%s" handleGetHelloWithName
-                route "/swagger/v1/swagger.json" >=> loadSwaggerDefinition
-                routef "/api/persons/%i" getPerson
-                routef "/api/persons?skip=%i&take=%i" getPeople
-                route "/api/persons" >=> getPeople (0,100)
-                routef "/api/persons/%s" getPeopleByName
-            ]
-        POST >=>
-            choose [
-                route "/api/persons" >=> storePerson
-            ]
-        PUT >=>
-            choose [
-                route "/api/persons" >=> updatePerson
-            ]
-        DELETE >=>
-            choose [
-                routef "/api/persons/%i" deletePerson
-            ]
-        setStatusCode 404 >=> text "Not Found" ]
+let webApp : Giraffe.EndpointRouting.Routers.Endpoint list =
+    router {
+        // GET endpoints
+        get "/" (indexHandler "world")
+        getf "/hello/%s" indexHandlerFeliz
+        getf "/api/hello/%s" handleGetHelloWithName
+        get "/swagger/v1/swagger.json" loadSwaggerDefinition
+        getf "/api/persons/%i" getPerson
+        getf "/api/persons?skip=%i&take=%i" getPeople
+        get "/api/persons" (getPeople (0,100))
+        getf "/api/persons/%s" getPeopleByName
+        
+        // POST endpoints
+        post "/api/persons" storePerson
+        
+        // PUT endpoints
+        put "/api/persons" updatePerson
+        
+        // DELETE endpoints
+        deletef "/api/persons/%i" deletePerson
+    }
 
 // ---------------------------------
 // Error handler

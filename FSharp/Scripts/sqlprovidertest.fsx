@@ -53,7 +53,7 @@ dbc.ExecuteNonQuery() |> ignore
 printfn "Table created successfully (or already existing!)"
 
 let newPerson = ctx.Dbo.Persons.Create()
-newPerson.Age <- 12 |> Some
+newPerson.Age <- 12
 let johnId = Guid.NewGuid().ToString().Substring(0, 4)
 newPerson.Name <- $"John_{johnId}" |> Some
 

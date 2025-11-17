@@ -24,7 +24,7 @@ module ProvidedTypes =
     [<Literal>]
     let useOptTypes = Common.NullableColumnType.NO_OPTION
 
-    type sql =
+    type sqlProvided =
         SqlDataProvider<
             DatabaseVendor = Common.DatabaseProviderTypes.POSTGRESQL,
             ConnectionStringName = "",
@@ -34,7 +34,7 @@ module ProvidedTypes =
             Owner=owner>
 
     let ctxFactory connectionStringRuntime =
-        sql.GetDataContext(connectionStringRuntime: string)
+        sqlProvided.GetDataContext(connectionStringRuntime: string)
 
     type PetsEndpointProvider = OpenApiClientProvider<"https://petstore.swagger.io/v2/swagger.json">
 
@@ -46,7 +46,7 @@ type PersonDto =
       Age: int
       Id: int }
 
-    static member Map(person: sql.dataContext.``dbo.personsEntity``) =
+    static member Map(person: sqlProvided.dataContext.``dbo.personsEntity``) =
         { Name = person.Name
           Age = person.Age
           Id = person.Id }
