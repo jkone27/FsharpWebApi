@@ -16,11 +16,11 @@ Uses [EF core](https://learn.microsoft.com/en-gb/ef/) PGSQL, ef migrations
 
 ## F# (MVC)
 
-Uses Swashbuckle for swagger and also [FSharp.Data](https://fsprojects.github.io/FSharp.Data/) to read `appsetting.json`, and [SwaggerTypeProvider](https://fsprojects.github.io/SwaggerProvider/#/) for connecting to petstore test api, and [Fsharp.Data.SqlProvider](https://fsprojects.github.io/SQLProvider/core/postgresql.html) for an "EF like" ~ experience for SQL query, and [DBup]() for migrations.
+⚡️💙🦔 Uses Swashbuckle for swagger and also [FSharp.Data](https://fsprojects.github.io/FSharp.Data/) to read `appsetting.json`, and [SwaggerTypeProvider](https://fsprojects.github.io/SwaggerProvider/#/) for connecting to petstore test api, and [Fsharp.Data.SqlProvider](https://fsprojects.github.io/SQLProvider/core/postgresql.html) for an "EF like" ~ experience for SQL query, and [DBup]() for migrations.
 
 ## F# Giraffe
 
-Shows a similar api just using [Giraffe endpoints](https://github.com/giraffe-fsharp/Giraffe/blob/master/DOCUMENTATION.md#endpoint-routing) and [Saturn](https://saturnframework.org/explanations/endpoint-routing.html). A more "modern" variant could make use of the wonderful [Falco](https://www.falcoframework.com/) or [OxPecker](https://lanayx.github.io/Oxpecker/) one of the most performant frameworks in benchmarks. Those listed last are modern web frameworks for F#, this is an old project ported to work for PGSQL and NET10 mostly, it might evolve further in the future.
+ Shows a similar api just using [Giraffe endpoints](https://github.com/giraffe-fsharp/Giraffe/blob/master/DOCUMENTATION.md#endpoint-routing) and [Saturn](https://saturnframework.org/explanations/endpoint-routing.html). A more "modern" variant could make use of the wonderful [Falco](https://www.falcoframework.com/) or [OxPecker](https://lanayx.github.io/Oxpecker/) one of the most performant frameworks in benchmarks. Those listed last are modern web frameworks for F#, this is an old project ported to work for PGSQL and NET10 mostly, it might evolve further in the future.
 
 ## Getting started
 
