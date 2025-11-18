@@ -1,4 +1,4 @@
-# Fsharp Web Api
+# F# Web Api
 
 ![image](https://github.com/user-attachments/assets/6c1d2d57-603f-41f2-9deb-52089dff576a)
 
