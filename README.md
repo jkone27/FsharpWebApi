@@ -2,7 +2,7 @@
 
 ![image](https://github.com/user-attachments/assets/6c1d2d57-603f-41f2-9deb-52089dff576a)
 
-Compares two almost identical APIs in F# and C#.
+Compares two almost identical APIs in F# and C#, in NET10 (LTS).
 
 Features:
 * CRUD controller to access a simple Persons Entity.
