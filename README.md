@@ -20,8 +20,7 @@ Uses Swashbuckle for swagger and also [FSharp.Data](https://fsprojects.github.io
 
 ## F# Giraffe
 
-Shows a similar api just using Giraffe endpoints. a more modern version could use Falco or OxPecker, which are modern web frameworks for F#, this was an old project ported to work for PGSQL and NET8 mostly, feel free to make a PR and add other F# variants!
-
+Shows a similar api just using [Giraffe endpoints](https://github.com/giraffe-fsharp/Giraffe/blob/master/DOCUMENTATION.md#endpoint-routing) and [Saturn](https://saturnframework.org/explanations/endpoint-routing.html). A more "modern" variant could make use of the wonderful [Falco](https://www.falcoframework.com/) or [OxPecker](https://lanayx.github.io/Oxpecker/) one of the most performant frameworks in benchmarks. Those listed last are modern web frameworks for F#, this is an old project ported to work for PGSQL and NET10 mostly, it might evolve further in the future.
 
 ## Getting started
 
